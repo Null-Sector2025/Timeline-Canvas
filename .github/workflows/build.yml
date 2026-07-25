@@ -7,29 +7,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Android SDK 34
+      # 自动配置Android SDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
           api-level: 34
           build-tools: 34.0.0
 
+      # JDK17 固定
       - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
 
-      # 本地生成兼容项目版本的 gradlew，使用指定Gradle8.7，避开系统Gradle9
-      - name: Generate project Gradle wrapper 8.7
-        run: |
-          sudo apt update && sudo apt install gradle=7.5-1ubuntu1.1
-          gradle wrapper --gradle-version 8.7
-          chmod +x gradlew
+      # 官方Gradle Action：自动生成gradlew、锁定8.7版本、缓存依赖，全程不碰apt
+      - name: Configure Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
 
-      - name: Assemble Release APK
+      # 直接标准打包命令
+      - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Release_APK
