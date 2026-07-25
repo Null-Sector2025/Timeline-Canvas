@@ -13,9 +13,21 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      # 官方Action自动处理wrapper、依赖缓存，不会提前解析项目脚本
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Install system Gradle
+        run: sudo apt update && sudo apt install gradle -y
+
+      # 仅生成wrapper文件，不解析子项目，规避Kotlin插件预解析报错
+      - name: Generate gradlew without evaluating subprojects
+        run: gradle wrapper --gradle-version 8.7 --settings-file=/dev/null
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Output-APK
+          path: app/build/outputs/apk/release/*.apk
