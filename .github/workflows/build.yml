@@ -16,18 +16,21 @@ jobs:
       - name: Install system Gradle
         run: sudo apt update && sudo apt install gradle -y
 
-      # 仅生成wrapper文件，不解析子项目，规避Kotlin插件预解析报错
-      - name: Generate gradlew without evaluating subprojects
-        run: gradle wrapper --gradle-version 8.7 --settings-file=/dev/null
+      # 临时隐藏项目配置，避免读取app模块触发Kotlin插件
+      - name: Backup settings file
+        run: |
+          mv settings.gradle settings.gradle.bak
+          gradle wrapper --gradle-version 8.7
+          mv settings.gradle.bak settings.gradle
 
-      - name: Grant execute permission
+      - name: Add execute permission
         run: chmod +x gradlew
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      - name: Upload APK
+      - name: Upload built APK
         uses: actions/upload-artifact@v4
         with:
-          name: Output-APK
+          name: Release-APK
           path: app/build/outputs/apk/release/*.apk
