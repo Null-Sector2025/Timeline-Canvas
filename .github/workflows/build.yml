@@ -12,14 +12,17 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Download official Gradle wrapper
+      - name: Prepare Gradle Wrapper
         run: |
-          wget https://services.gradle.org/distributions/gradle-8.7-all.zip
-          unzip gradle-8.7-all.zip
           mkdir -p gradle/wrapper
-          cp gradle-8.7/lib/gradle-wrapper.jar gradle/wrapper/
-          wget https://raw.githubusercontent.com/gradle/gradle/master/gradlew
+          # 直接下载对应版本wrapper.jar
+          wget https://services.gradle.org/distributions/gradle-8.7-all.zip
+          unzip -q gradle-8.7-all.zip gradle-8.7/lib/gradle-wrapper.jar
+          mv gradle-8.7/lib/gradle-wrapper.jar gradle/wrapper/
+          # 下载官方gradlew脚本
+          wget https://raw.githubusercontent.com/gradle/gradle/v8.7/gradlew
           chmod +x gradlew
+          rm -rf gradle-8.7 gradle-8.7-all.zip
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
