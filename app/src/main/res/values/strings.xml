@@ -24,7 +24,7 @@
     <!-- 设置 -->
     <string name="render_setting">FMS轨迹渲染参数</string>
     <string name="sampling_rate">画面采样精度</string>
-    <string name="float_window_setting">悬浮球&毛玻璃面板设置</string>
+    <string name="xxx">毛玻璃面板设置 &amp; 通用配置</string>
     <!-- 导出 -->
     <string name="export_long_img">长图教程</string>
     <string name="export_gif">GIF动图</string>
