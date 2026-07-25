@@ -5,14 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     container: gradle:8.7-jdk17
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build release APK
+      - name: Build Release APK
         run: gradle assembleRelease
 
-      - name: Upload output APK
+      - name: Upload compiled APK
         uses: actions/upload-artifact@v4
         with:
-          name: Compiled_APK
+          name: Release_APK
           path: app/build/outputs/apk/release/*.apk

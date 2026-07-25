@@ -2,7 +2,8 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
-rootProject.name = "TimeCanvas"
+rootProject.name = "Timeline-Canvas"
 include ':app'
