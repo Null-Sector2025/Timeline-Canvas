@@ -4,10 +4,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Android SDK
+      - name: Setup Android SDK 34
         uses: android-actions/setup-android@v3
         with:
           api-level: 34
@@ -19,10 +19,17 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Build Release APK
-        run: gradle assembleRelease
+      # 本地生成兼容项目版本的 gradlew，使用指定Gradle8.7，避开系统Gradle9
+      - name: Generate project Gradle wrapper 8.7
+        run: |
+          sudo apt update && sudo apt install gradle=7.5-1ubuntu1.1
+          gradle wrapper --gradle-version 8.7
+          chmod +x gradlew
 
-      - name: Upload compiled APK
+      - name: Assemble Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: Release_APK
