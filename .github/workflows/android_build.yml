@@ -18,6 +18,9 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Install Gradle
+      run: sudo apt update && sudo apt install gradle -y
+
     - name: Build Release APK
       run: gradle assembleRelease
 
